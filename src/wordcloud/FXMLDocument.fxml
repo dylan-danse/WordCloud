@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="591.0" prefWidth="656.0" xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wordcloud.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="738.0" prefWidth="651.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wordcloud.FXMLDocumentController">
     <children>
-      <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
+      <Label fx:id="cloudTitle" layoutX="14.0" layoutY="473.0" minHeight="16" minWidth="69" text="Cloud" />
       <TextArea fx:id="textArea" layoutX="14.0" layoutY="14.0" prefHeight="255.0" prefWidth="624.0" />
       <Button fx:id="generateCloudButton" layoutX="14.0" layoutY="283.0" mnemonicParsing="false" onAction="#generateButtonClicked" prefHeight="25.0" prefWidth="624.0" text="Generate Cloud" />
-      <ListView fx:id="tempListView" layoutX="14.0" layoutY="317.0" prefHeight="262.0" prefWidth="624.0" />
-      <Button fx:id="importFileButton" layoutX="555.0" layoutY="244.0" mnemonicParsing="false" onAction="#importFileButtonClicked" prefHeight="25.0" prefWidth="83.0" text="Import .txt" />
+      <ListView fx:id="tempListView" layoutX="14.0" layoutY="317.0" prefHeight="147.0" prefWidth="624.0" />
+      <Button fx:id="importFileButton" layoutX="548.0" layoutY="236.0" mnemonicParsing="false" onAction="#importFileButtonClicked" prefHeight="25.0" prefWidth="83.0" text="Import .txt" />
+      <Pane id="cloudPane" fx:id="cloudPane" layoutX="14.0" layoutY="490.0" prefHeight="238.0" prefWidth="624.0" />
     </children>
 </AnchorPane>
