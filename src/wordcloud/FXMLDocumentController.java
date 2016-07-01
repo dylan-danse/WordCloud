@@ -10,7 +10,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,23 +55,25 @@ public class FXMLDocumentController implements Initializable {
     }
     
     private String getContentFromTextFile(String path) throws IOException{
-        BufferedReader br = new BufferedReader(new FileReader(path));
-        String text;
-        try {
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-
-            while (line != null) {
+        StringBuilder sb = new StringBuilder();
+        String line;
+        int octetsRead;
+        byte[]tampon;
+        
+        try(InputStream out = Files.newInputStream(Paths.get(path), StandardOpenOption.READ)) {            
+            tampon = new byte[256];
+            octetsRead = out.read(tampon);
+            while (octetsRead > 0) {
+                line = new String(tampon, StandardCharsets.ISO_8859_1);
                 sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
+                octetsRead = out.read(tampon);
             }
-            text = sb.toString();
-        } 
-        finally {
-            br.close();
+        } catch (IOException ex) {
+            System.out.println("Specified path is not accessible");
+            ex.printStackTrace(System.err);
         }
-        return text;
+        
+        return sb.toString();
     }
     
     @Override
