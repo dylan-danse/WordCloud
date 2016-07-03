@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package wordcloud;
+package controllers;
 
+import models.WeighedWord;
+import models.TextParser;
+import models.PrintedWord;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -31,7 +33,7 @@ import javafx.stage.Stage;
  *
  * @author Dylan
  */
-public class FXMLDocumentController implements Initializable {
+public class MainController implements Initializable {
     
     @FXML private TextArea textArea;    
     @FXML private ListView tempListView;
