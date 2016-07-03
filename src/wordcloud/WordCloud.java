@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -22,9 +23,17 @@ public class WordCloud extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader chargeur = new  FXMLLoader (getClass().getResource("/views/MainView.fxml"));        
         chargeur.setController(new MainController());
-        MainController c = chargeur.getController();        
+        MainController c = chargeur.getController(); 
+        
         Parent root = chargeur.load();
         Scene scene = new Scene(root);
+        
+        stage.setMaxWidth(1000);
+        stage.setMinHeight(900);
+        stage.setMinWidth(900);
+        stage.getIcons().add(new Image("/pictures/cloud.png"));
+        stage.setTitle("KeyWord Cloud");
+        
         stage.setScene(scene);
         stage.show();
     }

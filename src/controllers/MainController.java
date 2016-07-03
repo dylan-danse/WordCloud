@@ -10,8 +10,6 @@ import models.TextParser;
 import models.PrintedWord;
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,6 +38,13 @@ public class MainController implements Initializable {
     @FXML private ListView tempListView;
     @FXML private FlowPane cloudFlowPane;
     
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        /*TODO : Remove, just for testing*/
+        cloudFlowPane.setStyle("-fx-border-color: black;");
+        /* ----------------------------- */ 
+    }
+    
     @FXML
     private void generateButtonClicked(ActionEvent event) {
         tempListView.getItems().clear();
@@ -63,19 +68,17 @@ public class MainController implements Initializable {
         textArea.setText(TextParser.textFileToString(selectedFile.getAbsolutePath()));
     }
     
-    
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        
-    }
-    
     private void addLabelsToCloud(Cloud words){        
         for (PrintedWord word : words) {
             Label label = new Label(word.getWord());        
             label.setTextFill(word.getColor());
             label.setFont(new Font(word.getSize()));
             label.setPadding(new Insets(2));
+            
+            /*TODO : Remove, just for testing*/
+            //label.setStyle("-fx-border-color: black;");
+            /* ----------------------------- */ 
+            
             cloudFlowPane.getChildren().add(label);
         }        
     }

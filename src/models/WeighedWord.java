@@ -5,8 +5,6 @@
  */
 package models;
 
-import java.util.Comparator;
-
 /**
  *
  * @author Dylan

@@ -5,7 +5,6 @@
  */
 package models;
 
-import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 
 /**
@@ -25,14 +24,16 @@ public class PrintedWord{
     
     public PrintedWord(WeighedWord word){
         this.word = word.getWord();
-        this.size = word.getFrequency() * 10;
         
         int freq = word.getFrequency();
         if (freq <= 2) {
+            this.size = 15;
             this.color = Color.GREEN;
         }else if(freq <= 4){
+            this.size = 30;
             this.color = Color.ORANGE;
         }else {
+            this.size = 45;
             this.color = Color.RED;
         }
     }
