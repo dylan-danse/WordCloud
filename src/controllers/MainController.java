@@ -27,6 +27,7 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import models.Cloud;
 
 
 /**
@@ -44,15 +45,13 @@ public class MainController implements Initializable {
         tempListView.getItems().clear();
         cloudFlowPane.getChildren().clear();
         
+        /*TODO : Remove, just for testing*/
         ObservableList<WeighedWord> obslist = FXCollections.observableArrayList(TextParser.stringToWeighedWords(textArea.getText(), 20, 3, 2));
         tempListView.setItems(obslist);
+        /* ----------------------------- */ 
         
-        List<PrintedWord> words = new ArrayList<>();
-        for (WeighedWord weighedWord : obslist) {
-            words.add(new PrintedWord(weighedWord));
-        }
-        
-        addLabelsToCloud(words);
+        Cloud cloud = new Cloud(TextParser.stringToWeighedWords(textArea.getText(), 20, 3, 2));        
+        addLabelsToCloud(cloud);
     }
     
     @FXML
@@ -71,7 +70,7 @@ public class MainController implements Initializable {
         
     }
     
-    private void addLabelsToCloud(List<PrintedWord> words){        
+    private void addLabelsToCloud(Cloud words){        
         for (PrintedWord word : words) {
             Label label = new Label(word.getWord());        
             label.setTextFill(word.getColor());
