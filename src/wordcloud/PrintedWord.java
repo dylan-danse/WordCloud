@@ -5,13 +5,14 @@
  */
 package wordcloud;
 
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 
 /**
  *
  * @author Dylan Danse
  */
-public class PrintedWord {
+public class PrintedWord{
     private String word;
     private int size;    
     private Color color;
@@ -20,6 +21,20 @@ public class PrintedWord {
         this.word = word;
         this.size = size;
         this.color = color;
+    }
+    
+    public PrintedWord(WeighedWord word){
+        this.word = word.getWord();
+        this.size = word.getFrequency() * 10;
+        
+        int freq = word.getFrequency();
+        if (freq <= 2) {
+            this.color = Color.GREEN;
+        }else if(freq <= 4){
+            this.color = Color.ORANGE;
+        }else {
+            this.color = Color.RED;
+        }
     }
     
     public String getWord() {
