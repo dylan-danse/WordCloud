@@ -40,10 +40,11 @@
                <GridPane.margin>
                   <Insets right="5.0" />
                </GridPane.margin></Button>
-            <FlowPane fx:id="cloudFlowPane" alignment="BASELINE_CENTER" prefHeight="404.0" prefWidth="624.0" rowValignment="BOTTOM" GridPane.columnSpan="2" GridPane.rowIndex="3">
+            <FlowPane fx:id="cloudPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
-               </GridPane.margin></FlowPane>
+               </GridPane.margin>
+            </FlowPane>
          </children>
       </GridPane>
     </children>

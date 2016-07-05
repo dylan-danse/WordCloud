@@ -5,20 +5,21 @@
  */
 package controllers;
 
-import models.WeighedWord;
-import models.TextParser;
-import models.PrintedWord;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
+import javafx.geometry.VPos;
+import javafx.scene.Cursor;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ColorPicker;
@@ -27,15 +28,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import models.Cloud;
+import models.PrintedWord;
+import models.TextParser;
+import models.WeighedWord;
 
 
 /**
@@ -46,27 +53,26 @@ public class MainController implements Initializable {
     
     @FXML private TextArea textArea;    
     @FXML private ListView tempListView;
-    @FXML private FlowPane cloudFlowPane;
+    @FXML private Pane cloudPane;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         /*TODO : Remove, just for testing*/
-        cloudFlowPane.setStyle("-fx-border-color: black;");
-        /* ----------------------------- */ 
-    }
-    
-    @FXML
-    private void generateButtonClicked(ActionEvent event) {
-        tempListView.getItems().clear();
-        cloudFlowPane.getChildren().clear();
-        
-        /*TODO : Remove, just for testing*/
-        ObservableList<WeighedWord> obslist = FXCollections.observableArrayList(TextParser.stringToWeighedWords(textArea.getText(), 20, 3, 2));
-        tempListView.setItems(obslist);
+        cloudPane.setStyle("-fx-border-color: black;");
         /* ----------------------------- */ 
         
-        Cloud cloud = new Cloud(TextParser.stringToWeighedWords(textArea.getText(), 20, 3, 2));        
-        addLabelsToCloud(cloud);
+        textArea.setOnDragOver((DragEvent event) -> {
+            Dragboard db = event.getDragboard();
+            if(db.hasFiles()){
+                event.acceptTransferModes(TransferMode.ANY);
+                for(File file:db.getFiles()){
+                    textArea.setText(TextParser.textFileToString(file.getAbsolutePath()));
+                }
+            }else{
+                event.setDropCompleted(false);
+            }            
+            event.consume();
+        });
     }
     
     @FXML
@@ -78,15 +84,21 @@ public class MainController implements Initializable {
         textArea.setText(TextParser.textFileToString(selectedFile.getAbsolutePath()));
     }
     
-    private void addLabelsToCloud(Cloud words){        
-        for (PrintedWord word : words) {
-            cloudFlowPane.getChildren().add(generateLabelFor(word));
-        }        
+    @FXML
+    private void generateButtonClicked(ActionEvent event) {
+        tempListView.getItems().clear();
+        cloudPane.getChildren().clear();
+        
+        /*TODO : Remove, just for testing*/
+        ObservableList<WeighedWord> obslist = FXCollections.observableArrayList(TextParser.stringToWeighedWords(textArea.getText(), 20, 3, 1));
+        tempListView.setItems(obslist);
+        /* ----------------------------- */ 
+        
+        Cloud cloud = new Cloud(TextParser.stringToWeighedWords(textArea.getText(), 20, 3, 2));        
+        cloudPane.getChildren().addAll(generateTextsFor(cloud));
     }
     
-    private void showModifyLabelDialog(Label label){
-        Label newLabel = label;
-        
+    private void showModifyLabelDialog(Text text){
         Dialog<PrintedWord> dialog = new Dialog<>();
         dialog.setTitle("Login Dialog");
         dialog.setHeaderText("Look, a Custom Login Dialog");
@@ -117,22 +129,48 @@ public class MainController implements Initializable {
         });
         
         Optional<PrintedWord> result = dialog.showAndWait();
-        if (result.isPresent()) {                   
-            label.setTextFill(result.get().getColor());
-            label.setFont(new Font(result.get().getSize()));
-        }
+        if(result.isPresent()){
+            text.setFill(result.get().getColor());
+            text.setFont(new Font(result.get().getSize()));
+        }        
     }
     
-    private Label generateLabelFor(PrintedWord word){
-        Label label = new Label(word.getWord());        
-        label.setTextFill(word.getColor());
-        label.setFont(new Font(word.getSize()));
-        label.setPadding(new Insets(2));            
-
-        label.setOnMouseClicked((MouseEvent e) -> {
-            showModifyLabelDialog(label);
+    private ArrayList<Text> generateTextsFor(Cloud words){        
+        ArrayList<Text> texts = new ArrayList<>();        
+        words.stream().map((word) -> {
+            final Delta dragDelta = new Delta();
+            
+            Text text = new Text(word.getWord());        
+            text.setFill(word.getColor());
+            text.setFont(new Font(word.getSize()));
+            text.setTextOrigin(VPos.TOP);
+            
+            /*Events*/
+            text.setOnMouseClicked((MouseEvent e) -> {
+                showModifyLabelDialog(text);
+            });        
+            text.setOnMousePressed((MouseEvent mouseEvent) -> {
+                dragDelta.x = text.getLayoutX() - mouseEvent.getSceneX();
+                dragDelta.y = text.getLayoutY() - mouseEvent.getSceneY();
+                text.setCursor(Cursor.MOVE);
+            });
+            text.setOnMouseReleased((MouseEvent mouseEvent) -> {
+                text.setCursor(Cursor.HAND);
+            });
+            text.setOnMouseDragged((MouseEvent mouseEvent) -> {
+                text.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
+                text.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+            });
+            return text;
+        }).map((text) -> {
+            text.setOnMouseEntered((MouseEvent mouseEvent) -> {
+                text.setCursor(Cursor.HAND);
+            });
+            return text;
+        }).forEach((text) -> {
+            texts.add(text);
         });
-        
-        return label;
-    }
+        return texts;
+    }    
 }
+class Delta { double x, y; }
