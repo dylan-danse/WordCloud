@@ -5,10 +5,7 @@
  */
 package controllers;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -18,7 +15,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -66,10 +62,12 @@ public class MainController implements Initializable {
             if(db.hasFiles()){
                 event.acceptTransferModes(TransferMode.ANY);
                 for(File file:db.getFiles()){
-                    textArea.setText(TextParser.textFileToString(file.getAbsolutePath()));
+                    if("txt".equals(TextParser.getExtension(file)))
+                        textArea.setText(TextParser.textFileToString(file.getAbsolutePath()));
                 }
             }else{
                 event.setDropCompleted(false);
+                textArea.setText("");
             }            
             event.consume();
         });
@@ -91,7 +89,7 @@ public class MainController implements Initializable {
         
         /*TODO : Remove, just for testing*/
         ObservableList<WeighedWord> obslist = FXCollections.observableArrayList(TextParser.stringToWeighedWords(textArea.getText(), 20, 3, 1));
-        tempListView.setItems(obslist);
+        tempListView.setItems(obslist);    
         /* ----------------------------- */ 
         
         Cloud cloud = new Cloud(TextParser.stringToWeighedWords(textArea.getText(), 20, 3, 2));        
@@ -143,7 +141,6 @@ public class MainController implements Initializable {
             Text text = new Text(word.getWord());        
             text.setFill(word.getColor());
             text.setFont(new Font(word.getSize()));
-            text.setTextOrigin(VPos.TOP);
             
             /*Events*/
             text.setOnMouseClicked((MouseEvent e) -> {

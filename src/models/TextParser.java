@@ -5,6 +5,7 @@
  */
 package models;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -71,4 +72,14 @@ public class TextParser {
         }        
         return sb.toString();
     }
+     
+     public static String getExtension(File file){
+        String extension = "";
+        String fileName = file.getAbsolutePath();
+        int i = fileName.lastIndexOf('.');
+        if (i >= 0) {
+            extension = fileName.substring(i+1);
+        }
+        return extension;
+     }
 }
