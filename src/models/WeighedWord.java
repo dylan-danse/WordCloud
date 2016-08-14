@@ -9,7 +9,7 @@ package models;
  *
  * @author Dylan
  */
-public class WeighedWord{
+public class WeighedWord implements Comparable<WeighedWord>{
     private String word;
     private int frequency;
 
@@ -38,7 +38,7 @@ public class WeighedWord{
     }
 
     @Override
-    public String toString() {
-        return this.word + " - " + this.frequency;
+    public int compareTo(WeighedWord t) {
+        return this.word.compareTo(t.getWord());
     }
 }

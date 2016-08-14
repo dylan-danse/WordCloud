@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.BreakIterator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ import java.util.List;
  */
 public class TextParser {
     
-     public static List<WeighedWord> stringToWeighedWords(String text, int nbMots, int tailleMin, int freqMin) {
+     public static List<WeighedWord> stringToWeighedWords(String text, int nbMots, int tailleMin, int freqMin, boolean isOrdered) {
         List<WeighedWord> words = new ArrayList<>();
         String currentWord;
         WeighedWord word;
@@ -49,6 +50,12 @@ public class TextParser {
             }
         }
         words.removeIf(p -> p.getFrequency() < freqMin);
+        
+        if(isOrdered)
+            Collections.sort(words);
+        else
+            Collections.shuffle(words);
+        
         return words;
     }
      

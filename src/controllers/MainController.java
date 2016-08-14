@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -38,7 +39,6 @@ import javafx.stage.Stage;
 import models.Cloud;
 import models.PrintedWord;
 import models.TextParser;
-import models.WeighedWord;
 
 
 /**
@@ -47,9 +47,13 @@ import models.WeighedWord;
  */
 public class MainController implements Initializable {
     
-    @FXML private TextArea textArea;    
-    @FXML private ListView tempListView;
+    @FXML private TextArea textArea;
     @FXML private Pane cloudPane;
+    @FXML private TextField minSizeField;
+    @FXML private TextField minFreqField;
+    @FXML private TextField maxWordsNumberField;
+    @FXML private CheckBox isOrdered;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -83,16 +87,26 @@ public class MainController implements Initializable {
     }
     
     @FXML
-    private void generateButtonClicked(ActionEvent event) {
-        tempListView.getItems().clear();
+    private void generateButtonClicked(ActionEvent event) {       
         cloudPane.getChildren().clear();
+        int minSize = 3;
+        int minFreq = 2;
+        int maxWords = 20;
         
-        /*TODO : Remove, just for testing*/
-        ObservableList<WeighedWord> obslist = FXCollections.observableArrayList(TextParser.stringToWeighedWords(textArea.getText(), 20, 3, 1));
-        tempListView.setItems(obslist);    
-        /* ----------------------------- */ 
+        try {
+            minSize = Integer.parseInt(minSizeField.getText());
+        } catch (Exception e) {
+        }
+        try {
+            minFreq = Integer.parseInt(minFreqField.getText());
+        } catch (Exception e) {
+        }
+        try {
+            maxWords = Integer.parseInt(maxWordsNumberField.getText());
+        } catch (Exception e) {
+        }
         
-        Cloud cloud = new Cloud(TextParser.stringToWeighedWords(textArea.getText(), 20, 3, 2));        
+        Cloud cloud = new Cloud(TextParser.stringToWeighedWords(textArea.getText(), maxWords, minSize, minFreq, isOrdered.isSelected()));        
         cloudPane.getChildren().addAll(generateTextsFor(cloud));
     }
     
@@ -136,27 +150,27 @@ public class MainController implements Initializable {
     private ArrayList<Text> generateTextsFor(Cloud words){        
         ArrayList<Text> texts = new ArrayList<>();        
         words.stream().map((word) -> {
-            final Delta dragDelta = new Delta();
             
             Text text = new Text(word.getWord());        
             text.setFill(word.getColor());
             text.setFont(new Font(word.getSize()));
             
             /*Events*/
-            text.setOnMouseClicked((MouseEvent e) -> {
+            text.setOnMouseClicked((MouseEvent e) -> {                
+                System.out.println("CLICKED");
                 showModifyLabelDialog(text);
             });        
-            text.setOnMousePressed((MouseEvent mouseEvent) -> {
-                dragDelta.x = text.getLayoutX() - mouseEvent.getSceneX();
-                dragDelta.y = text.getLayoutY() - mouseEvent.getSceneY();
+            text.setOnMousePressed((MouseEvent mouseEvent) -> {                 
+                System.out.println("PRESSED");
                 text.setCursor(Cursor.MOVE);
             });
-            text.setOnMouseReleased((MouseEvent mouseEvent) -> {
+            text.setOnMouseReleased((MouseEvent mouseEvent) -> {                
+                System.out.println("RELEASED");
+                /*TODO : Switch words in cloud*/ 
                 text.setCursor(Cursor.HAND);
             });
             text.setOnMouseDragged((MouseEvent mouseEvent) -> {
-                text.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
-                text.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+                System.out.println("DRAGGED");
             });
             return text;
         }).map((text) -> {
@@ -170,4 +184,3 @@ public class MainController implements Initializable {
         return texts;
     }    
 }
-class Delta { double x, y; }

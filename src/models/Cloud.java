@@ -21,6 +21,5 @@ public class Cloud extends ArrayList<PrintedWord> {
         words.stream().forEach((weighedWord) -> {
             this.add(new PrintedWord(weighedWord));
         });
-        Collections.shuffle(this);
     }
 }
