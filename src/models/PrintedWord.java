@@ -6,6 +6,7 @@
 package models;
 
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  *
@@ -13,27 +14,39 @@ import javafx.scene.paint.Color;
  */
 public class PrintedWord{
     private String word;
-    private int size;    
     private Color color;
+    private Font font;
 
-    public PrintedWord(String word, int size, Color color) {
+    public PrintedWord(String word, Color color, Font font) {
         this.word = word;
-        this.size = size;
         this.color = color;
+        this.font = font;
+    }
+    
+    public PrintedWord(WeighedWord word, String font){
+        this.word = word.getWord();        
+        int freq = word.getFrequency();
+        this.font = new Font(font, freq*10);
+        
+        if (freq <= 2) {
+            this.color = Color.GREEN;
+        }else if(freq <= 4){
+            this.color = Color.ORANGE;
+        }else {
+            this.color = Color.RED;
+        }
     }
     
     public PrintedWord(WeighedWord word){
-        this.word = word.getWord();
-        
+        this.word = word.getWord();        
         int freq = word.getFrequency();
+        this.font = new Font("System", freq*7);
+        
         if (freq <= 2) {
-            this.size = 15;
             this.color = Color.GREEN;
         }else if(freq <= 4){
-            this.size = 30;
             this.color = Color.ORANGE;
         }else {
-            this.size = 45;
             this.color = Color.RED;
         }
     }
@@ -41,12 +54,12 @@ public class PrintedWord{
     public String getWord() {
         return word;
     }
-
-    public int getSize() {
-        return size;
-    }
-
+    
     public Color getColor() {
         return color;
+    }
+    
+    public Font getFont() {
+        return font;
     }
 }

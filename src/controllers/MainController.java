@@ -10,8 +10,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,9 +20,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -36,6 +34,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.util.converter.NumberStringConverter;
 import models.Cloud;
 import models.PrintedWord;
 import models.TextParser;
@@ -60,6 +59,10 @@ public class MainController implements Initializable {
         /*TODO : Remove, just for testing*/
         cloudPane.setStyle("-fx-border-color: black;");
         /* ----------------------------- */ 
+        
+        minSizeField.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
+        minFreqField.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
+        maxWordsNumberField.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
         
         textArea.setOnDragOver((DragEvent event) -> {
             Dragboard db = event.getDragboard();
@@ -134,7 +137,10 @@ public class MainController implements Initializable {
         
         dialog.setResultConverter((ButtonType param) -> {
             if (param == buttonTypeOk) {
-                return new PrintedWord("test", Integer.parseInt(fontSize.getText()), picker.getValue());
+                if (fontSize.getText().isEmpty())
+                    return new PrintedWord(text.getText(), picker.getValue(),text.getFont());
+                else
+                    return new PrintedWord(text.getText(), picker.getValue(), new Font("System",Integer.parseInt(fontSize.getText())));
             }else{
                 return null;                
             }
@@ -143,7 +149,7 @@ public class MainController implements Initializable {
         Optional<PrintedWord> result = dialog.showAndWait();
         if(result.isPresent()){
             text.setFill(result.get().getColor());
-            text.setFont(new Font(result.get().getSize()));
+            text.setFont(result.get().getFont());
         }        
     }
     
@@ -153,7 +159,7 @@ public class MainController implements Initializable {
             
             Text text = new Text(word.getWord());        
             text.setFill(word.getColor());
-            text.setFont(new Font(word.getSize()));
+            text.setFont(word.getFont());
             
             /*Events*/
             text.setOnMouseClicked((MouseEvent e) -> {                
