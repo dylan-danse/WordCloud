@@ -175,6 +175,8 @@ public class MainController implements Initializable {
             Text text = new Text(word.getWord());        
             text.setFill(word.getColor());
             text.setFont(word.getFont());
+            if(Math.random() < 0.2)
+                text.setRotate(90);
             
             /*Events*/
             text.setOnMouseClicked((MouseEvent e) -> {                
