@@ -23,31 +23,37 @@ public class PrintedWord{
         this.font = font;
     }
     
-    public PrintedWord(WeighedWord word, String font){
+    public PrintedWord(WeighedWord word, String font, Colors color){
         this.word = word.getWord();        
         int freq = word.getFrequency();
-        this.font = new Font(font, freq*10);
+        this.font = new Font(font, freq*8);
         
-        if (freq <= 2) {
-            this.color = Color.CORNFLOWERBLUE;
-        }else if(freq <= 4){
-            this.color = Color.BLUE;
-        }else {
-            this.color = Color.DARKBLUE;
-        }
-    }
-    
-    public PrintedWord(WeighedWord word){
-        this.word = word.getWord();        
-        int freq = word.getFrequency();
-        this.font = new Font("System", freq*7);
-        
-        if (freq <= 2) {
-            this.color = Color.GREEN;
-        }else if(freq <= 4){
-            this.color = Color.ORANGE;
-        }else {
-            this.color = Color.RED;
+        switch(color){
+            case Blue:
+                if (freq <= 2)
+                    this.color = Color.CORNFLOWERBLUE;
+                else if(freq <= 4)
+                    this.color = Color.BLUE;
+                else
+                    this.color = Color.DARKBLUE;
+                break;
+            case Green:
+                if (freq <= 2)
+                    this.color = Color.LIGHTGREEN;
+                else if(freq <= 4)
+                    this.color = Color.GREEN;
+                else
+                    this.color = Color.DARKGREEN;
+                break;
+            case Red:
+                if (freq <= 2)
+                    this.color = Color.SALMON;
+                else if(freq <= 4)
+                    this.color = Color.RED;
+                else
+                    this.color = Color.DARKRED;
+                break;
+                
         }
     }
     

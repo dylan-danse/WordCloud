@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -30,7 +31,9 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -39,6 +42,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
 import models.Cloud;
+import models.Colors;
 import models.PrintedWord;
 import models.TextParser;
 
@@ -57,18 +61,18 @@ public class MainController implements Initializable {
     @FXML private CheckBox isOrdered;
     @FXML private ComboBox fontChooserComboBox;
     @FXML private ImageView image;
+    @FXML private ComboBox themeColorComboBox;
     
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        /*TODO : Remove, just for testing*/
-        cloudPane.setStyle("-fx-border-color: black;");
-        /* ----------------------------- */ 
         
         minSizeField.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
         minFreqField.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
         maxWordsNumberField.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
-        fontChooserComboBox.setItems(FXCollections.observableArrayList(Font.getFamilies()));
+        fontChooserComboBox.getItems().setAll(Font.getFamilies());
+        themeColorComboBox.getItems().setAll(Colors.values());
+        themeColorComboBox.getSelectionModel().select(0);
         
         textArea.setOnDragOver((DragEvent event) -> {
             Dragboard db = event.getDragboard();
@@ -123,7 +127,13 @@ public class MainController implements Initializable {
         } catch (Exception e) {
         }
         
-        Cloud cloud = new Cloud(TextParser.stringToWeighedWords(textArea.getText(), maxWords, minSize, minFreq, isOrdered.isSelected()),fontFamily);        
+        Cloud cloud = new Cloud(TextParser.stringToWeighedWords(textArea.getText(), 
+                                                                maxWords, 
+                                                                minSize, 
+                                                                minFreq, 
+                                                                isOrdered.isSelected()),
+                                                                fontFamily, 
+                                                                (Colors)themeColorComboBox.getSelectionModel().getSelectedItem());        
         cloudPane.getChildren().addAll(generateTextsFor(cloud));
     }
         
@@ -171,9 +181,10 @@ public class MainController implements Initializable {
         ArrayList<Text> texts = new ArrayList<>();        
         words.stream().map((word) -> {
             
-            Text text = new Text(word.getWord());        
+            Text text = new Text(word.getWord());
             text.setFill(word.getColor());
             text.setFont(word.getFont());
+            FlowPane.setMargin(text, new Insets(5));
             if(Math.random() < 0.2)
                 text.setRotate(-90);            
                 
