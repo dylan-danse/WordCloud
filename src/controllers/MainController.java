@@ -10,7 +10,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -18,11 +20,13 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -52,6 +56,8 @@ public class MainController implements Initializable {
     @FXML private TextField minFreqField;
     @FXML private TextField maxWordsNumberField;
     @FXML private CheckBox isOrdered;
+    @FXML private ComboBox fontChooserComboBox;
+    @FXML private ImageView image;
     
     
     @Override
@@ -63,6 +69,7 @@ public class MainController implements Initializable {
         minSizeField.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
         minFreqField.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
         maxWordsNumberField.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
+        fontChooserComboBox.setItems(FXCollections.observableArrayList(Font.getFamilies()));
         
         textArea.setOnDragOver((DragEvent event) -> {
             Dragboard db = event.getDragboard();
@@ -78,15 +85,18 @@ public class MainController implements Initializable {
             }            
             event.consume();
         });
-    }
-    
-    @FXML
-    private void importFileButtonClicked(ActionEvent event){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Text File");
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("Text Files", "*.txt"));
-        File selectedFile = fileChooser.showOpenDialog(new Stage());
-        textArea.setText(TextParser.textFileToString(selectedFile.getAbsolutePath()));
+        
+        image.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Open Text File");
+                fileChooser.getExtensionFilters().add(new ExtensionFilter("Text Files", "*.txt"));
+                File selectedFile = fileChooser.showOpenDialog(new Stage());
+                textArea.setText(TextParser.textFileToString(selectedFile.getAbsolutePath()));
+                event.consume();
+            }
+       });
     }
     
     @FXML
@@ -95,6 +105,7 @@ public class MainController implements Initializable {
         int minSize = 3;
         int minFreq = 2;
         int maxWords = 20;
+        String fontFamily = "System";
         
         try {
             minSize = Integer.parseInt(minSizeField.getText());
@@ -108,8 +119,12 @@ public class MainController implements Initializable {
             maxWords = Integer.parseInt(maxWordsNumberField.getText());
         } catch (Exception e) {
         }
+        try {
+            fontFamily = fontChooserComboBox.getSelectionModel().getSelectedItem().toString();
+        } catch (Exception e) {
+        }
         
-        Cloud cloud = new Cloud(TextParser.stringToWeighedWords(textArea.getText(), maxWords, minSize, minFreq, isOrdered.isSelected()));        
+        Cloud cloud = new Cloud(TextParser.stringToWeighedWords(textArea.getText(), maxWords, minSize, minFreq, isOrdered.isSelected()),fontFamily);        
         cloudPane.getChildren().addAll(generateTextsFor(cloud));
     }
     

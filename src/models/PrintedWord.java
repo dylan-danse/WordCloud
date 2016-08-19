@@ -29,11 +29,11 @@ public class PrintedWord{
         this.font = new Font(font, freq*10);
         
         if (freq <= 2) {
-            this.color = Color.GREEN;
+            this.color = Color.CORNFLOWERBLUE;
         }else if(freq <= 4){
-            this.color = Color.ORANGE;
+            this.color = Color.BLUE;
         }else {
-            this.color = Color.RED;
+            this.color = Color.DARKBLUE;
         }
     }
     

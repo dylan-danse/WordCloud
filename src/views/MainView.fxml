@@ -3,50 +3,48 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" maxHeight="900.0" maxWidth="900.0" minHeight="900.0" minWidth="900.0" prefHeight="900.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="900.0" minWidth="1200.0" prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-      <GridPane prefHeight="800.0" prefWidth="889.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane layoutX="-67.0" layoutY="7.0" prefHeight="900.0" prefWidth="957.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="7.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="641.0" minWidth="10.0" prefWidth="640.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="439.0" minWidth="10.0" prefWidth="249.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="743.0" minWidth="10.0" percentWidth="65.0" prefWidth="743.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="439.0" minWidth="10.0" percentWidth="35.0" prefWidth="337.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="0.0" minHeight="0.0" percentHeight="45.0" prefHeight="0.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="40.0" minHeight="40.0" percentHeight="5.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="40.0" percentHeight="5.0" prefHeight="40.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="0.0" minHeight="0.0" percentHeight="45.0" prefHeight="0.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="532.0" minHeight="0.0" percentHeight="35.0" prefHeight="373.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="40.0" minHeight="40.0" percentHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="0.0" minHeight="0.0" percentHeight="55.0" prefHeight="0.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextArea fx:id="textArea" prefHeight="255.0" prefWidth="624.0" wrapText="true">
+            <TextArea fx:id="textArea" prefHeight="417.0" prefWidth="728.0" wrapText="true">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
                </GridPane.margin></TextArea>
-            <Button fx:id="generateCloudButton" mnemonicParsing="false" onAction="#generateButtonClicked" prefHeight="45.0" prefWidth="641.0" text="Generate Cloud" GridPane.rowIndex="2">
+            <Button fx:id="generateCloudButton" defaultButton="true" mnemonicParsing="false" onAction="#generateButtonClicked" prefHeight="34.0" prefWidth="1247.0" text="Generate Cloud" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <GridPane.margin>
-                  <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </GridPane.margin></Button>
-            <Button fx:id="importFileButton" mnemonicParsing="false" onAction="#importFileButtonClicked" prefHeight="25.0" prefWidth="123.0" text="Import text file" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP">
-               <GridPane.margin>
-                  <Insets right="5.0" />
-               </GridPane.margin></Button>
-            <FlowPane fx:id="cloudPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="393.0" prefWidth="871.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
+            <FlowPane fx:id="cloudPane" GridPane.columnSpan="2" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
                </GridPane.margin>
             </FlowPane>
             <GridPane GridPane.columnIndex="1">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="254.0" minWidth="10.0" prefWidth="183.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="124.0" minWidth="5.0" prefWidth="76.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="254.0" minWidth="10.0" prefWidth="208.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="190.0" minWidth="5.0" prefWidth="166.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -88,14 +86,35 @@
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Label text="Ordered alphabetically :" GridPane.rowIndex="3">
+                  <Label text="Ordered alphabetically :" textAlignment="CENTER" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </Label>
-                  <CheckBox fx:id="isOrdered" mnemonicParsing="false" prefHeight="17.0" prefWidth="34.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <CheckBox fx:id="isOrdered" mnemonicParsing="false" prefHeight="17.0" prefWidth="161.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <ComboBox fx:id="fontChooserComboBox" prefHeight="25.0" prefWidth="159.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
+                  </ComboBox>
+                  <Label text="Font Family :" GridPane.rowIndex="3">
+                     <opaqueInsets>
+                        <Insets left="5.0" />
+                     </opaqueInsets>
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin>
+                  </Label>
                </children>
             </GridPane>
+            <ImageView fx:id="image" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="15.0" right="11.0" />
+               </GridPane.margin>
+               <image>
+                  <Image url="@../pictures/add.png" />
+               </image>
+            </ImageView>
          </children>
       </GridPane>
     </children>

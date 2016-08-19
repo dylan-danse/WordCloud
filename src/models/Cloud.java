@@ -7,7 +7,6 @@ package models;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  *
@@ -17,9 +16,9 @@ public class Cloud extends ArrayList<PrintedWord> {
     
     public Cloud(){}
     
-    public Cloud(Collection<WeighedWord> words){        
+    public Cloud(Collection<WeighedWord> words, String fontFamily){        
         words.stream().forEach((weighedWord) -> {
-            this.add(new PrintedWord(weighedWord));
+            this.add(new PrintedWord(weighedWord, fontFamily));
         });
     }
 }
