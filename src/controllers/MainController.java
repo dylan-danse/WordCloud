@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -86,17 +85,17 @@ public class MainController implements Initializable {
             event.consume();
         });
         
-        image.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Open Text File");
-                fileChooser.getExtensionFilters().add(new ExtensionFilter("Text Files", "*.txt"));
-                File selectedFile = fileChooser.showOpenDialog(new Stage());
+        image.setOnMouseClicked((MouseEvent event) -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Text File");
+            fileChooser.getExtensionFilters().add(new ExtensionFilter("Text Files", "*.txt"));
+            File selectedFile = fileChooser.showOpenDialog(new Stage());
+            try {
                 textArea.setText(TextParser.textFileToString(selectedFile.getAbsolutePath()));
-                event.consume();
-            }
-       });
+            } catch (Exception e) {
+            }            
+            event.consume();
+        });
     }
     
     @FXML
@@ -127,7 +126,7 @@ public class MainController implements Initializable {
         Cloud cloud = new Cloud(TextParser.stringToWeighedWords(textArea.getText(), maxWords, minSize, minFreq, isOrdered.isSelected()),fontFamily);        
         cloudPane.getChildren().addAll(generateTextsFor(cloud));
     }
-    
+        
     private void showModifyLabelDialog(Text text){
         Dialog<PrintedWord> dialog = new Dialog<>();
         dialog.setTitle("Login Dialog");
@@ -176,9 +175,8 @@ public class MainController implements Initializable {
             text.setFill(word.getColor());
             text.setFont(word.getFont());
             if(Math.random() < 0.2)
-                text.setRotate(90);
-            
-            /*Events*/
+                text.setRotate(-90);            
+                
             text.setOnMouseClicked((MouseEvent e) -> {                
                 System.out.println("CLICKED");
                 showModifyLabelDialog(text);
