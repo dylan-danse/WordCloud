@@ -8,6 +8,8 @@ package controllers;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -15,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
@@ -61,6 +64,9 @@ public class MainController implements Initializable {
     @FXML private ComboBox fontChooserComboBox;
     @FXML private ImageView image;
     @FXML private ComboBox themeColorComboBox;
+    
+    private Node textClicked;
+    private Node textToSwitch;
     
     
     @Override
@@ -190,25 +196,34 @@ public class MainController implements Initializable {
             text.setOnMouseEntered((MouseEvent mouseEvent) -> {
                 text.setCursor(Cursor.HAND);
             });
-            text.setOnMouseClicked((MouseEvent e) -> {  
-                    System.out.println("CLICKED");
+            text.setOnMouseClicked((MouseEvent e) -> { 
                     showModifyLabelDialog(text);
             });        
-            text.setOnMousePressed((MouseEvent mouseEvent) -> {                 
-                System.out.println("PRESSED");
+            text.setOnMousePressed((MouseEvent mouseEvent) -> { 
+                textClicked = text;
                 text.setCursor(Cursor.MOVE);
             });
-            text.setOnMouseReleased((MouseEvent mouseEvent) -> {                
-                System.out.println("RELEASED");
-                /*TODO : Switch words in cloud*/ 
+            text.setOnMouseReleased((MouseEvent mouseEvent) -> {  
+                //cloudPane.getChildren().setAll(switchTextInList(cloudPane.getChildren(), textClicked, cloudPane.getChildren().get(1)));
+                cloudPane.getChildren().setAll(moveItem(cloudPane.getChildren().indexOf(textClicked), 3, cloudPane.getChildren()));
                 text.setCursor(Cursor.HAND);
             });
-            text.setOnMouseDragged((MouseEvent mouseEvent) -> {
-                System.out.println("DRAGGED");
-            }); 
+//            text.setOnMouseDragged((MouseEvent mouseEvent) -> {
+//                System.out.println("DRAGGED");
+//            }); 
             texts.add(text);
         }
         
         return texts;
-    }    
+    } 
+    
+    public List<Node> moveItem(int sourceIndex, int targetIndex, List<Node> list) {
+        List<Node> newList = new ArrayList<>(list);
+        if (sourceIndex <= targetIndex) {
+            Collections.rotate(newList.subList(sourceIndex, targetIndex + 1), -1);
+        } else {
+            Collections.rotate(newList.subList(targetIndex, sourceIndex + 1), 1);
+        }
+        return newList;
+    }
 }
