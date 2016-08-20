@@ -32,6 +32,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.FlowPane;
@@ -65,9 +66,7 @@ public class MainController implements Initializable {
     @FXML private ImageView image;
     @FXML private ComboBox themeColorComboBox;
     
-    private Node textClicked;
-    private Node textToSwitch;
-    
+    private Node textClicked;    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -79,7 +78,7 @@ public class MainController implements Initializable {
         themeColorComboBox.getItems().setAll(Colors.values());
         themeColorComboBox.getSelectionModel().select(0);
         
-        textArea.setOnDragOver((DragEvent event) -> {
+        textArea.setOnDragDropped((DragEvent event) -> {
             Dragboard db = event.getDragboard();
             if(db.hasFiles()){
                 event.acceptTransferModes(TransferMode.ANY);
@@ -191,11 +190,8 @@ public class MainController implements Initializable {
             text.setFont(word.getFont());
             FlowPane.setMargin(text, new Insets(5));
             if(Math.random() < 0.2)
-                text.setRotate(-90);
+                text.setRotate(-90);            
             
-            text.setOnMouseEntered((MouseEvent mouseEvent) -> {
-                text.setCursor(Cursor.HAND);
-            });
             text.setOnMouseClicked((MouseEvent e) -> { 
                     showModifyLabelDialog(text);
             });        
@@ -204,13 +200,18 @@ public class MainController implements Initializable {
                 text.setCursor(Cursor.MOVE);
             });
             text.setOnMouseReleased((MouseEvent mouseEvent) -> {  
-                //cloudPane.getChildren().setAll(switchTextInList(cloudPane.getChildren(), textClicked, cloudPane.getChildren().get(1)));
-                cloudPane.getChildren().setAll(moveItem(cloudPane.getChildren().indexOf(textClicked), 3, cloudPane.getChildren()));
+                textClicked = null;
                 text.setCursor(Cursor.HAND);
             });
-//            text.setOnMouseDragged((MouseEvent mouseEvent) -> {
-//                System.out.println("DRAGGED");
-//            }); 
+            text.setOnMouseEntered((MouseEvent mouseEvent) -> {
+                text.setCursor(Cursor.HAND); 
+                if(textClicked != null){
+                    cloudPane.getChildren().setAll(moveItem(cloudPane.getChildren().indexOf(textClicked), 
+                                                            cloudPane.getChildren().indexOf(text), 
+                                                            cloudPane.getChildren()));
+                }
+            });
+            
             texts.add(text);
         }
         
