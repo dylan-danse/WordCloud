@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,11 +28,11 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -179,18 +178,21 @@ public class MainController implements Initializable {
     
     private ArrayList<Text> generateTextsFor(Cloud words){        
         ArrayList<Text> texts = new ArrayList<>();        
-        words.stream().map((word) -> {
-            
+
+        for(PrintedWord word : words){
             Text text = new Text(word.getWord());
             text.setFill(word.getColor());
             text.setFont(word.getFont());
             FlowPane.setMargin(text, new Insets(5));
             if(Math.random() < 0.2)
-                text.setRotate(-90);            
-                
-            text.setOnMouseClicked((MouseEvent e) -> {                
-                System.out.println("CLICKED");
-                showModifyLabelDialog(text);
+                text.setRotate(-90);
+            
+            text.setOnMouseEntered((MouseEvent mouseEvent) -> {
+                text.setCursor(Cursor.HAND);
+            });
+            text.setOnMouseClicked((MouseEvent e) -> {  
+                    System.out.println("CLICKED");
+                    showModifyLabelDialog(text);
             });        
             text.setOnMousePressed((MouseEvent mouseEvent) -> {                 
                 System.out.println("PRESSED");
@@ -203,16 +205,10 @@ public class MainController implements Initializable {
             });
             text.setOnMouseDragged((MouseEvent mouseEvent) -> {
                 System.out.println("DRAGGED");
-            });
-            return text;
-        }).map((text) -> {
-            text.setOnMouseEntered((MouseEvent mouseEvent) -> {
-                text.setCursor(Cursor.HAND);
-            });
-            return text;
-        }).forEach((text) -> {
+            }); 
             texts.add(text);
-        });
+        }
+        
         return texts;
     }    
 }
