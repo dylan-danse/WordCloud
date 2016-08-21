@@ -74,7 +74,7 @@
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Max number of words (40) :" GridPane.rowIndex="2">
+                  <Label text="Max number of words (20) :" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin>

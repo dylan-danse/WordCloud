@@ -76,9 +76,7 @@ public class MainController implements Initializable {
         maxWordsNumberField.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
         fontChooserComboBox.getItems().setAll(Font.getFamilies());
         themeColorComboBox.getItems().setAll(Colors.values());
-        themeColorComboBox.getSelectionModel().select(0);
-        
-        
+        themeColorComboBox.getSelectionModel().select(0); 
         
         textArea.setOnDragOver((DragEvent event) -> {
             if(event.getDragboard().hasFiles()){
@@ -120,7 +118,7 @@ public class MainController implements Initializable {
         cloudPane.getChildren().clear();
         int minSize = 3;
         int minFreq = 2;
-        int maxWords = 40;
+        int maxWords = 20;
         String fontFamily = "System";
         
         try {
@@ -160,8 +158,7 @@ public class MainController implements Initializable {
         TextField fontSize = new TextField();
         fontSize.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
         fontSize.setText(String.valueOf(text.getFont().getSize()));
-        ColorPicker picker = new ColorPicker((Color) text.getFill());
-        
+        ColorPicker picker = new ColorPicker((Color) text.getFill());        
         
         GridPane grid = new GridPane();
         grid.add(label1,1,1);
@@ -172,16 +169,23 @@ public class MainController implements Initializable {
 
         ButtonType buttonTypeOk = new ButtonType("OK", ButtonData.OK_DONE);
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+        ButtonType buttonTypeDelete = new ButtonType("Delete text");
         dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
         dialog.getDialogPane().getButtonTypes().add(buttonTypeCancel);
+        dialog.getDialogPane().getButtonTypes().add(buttonTypeDelete);
         
         dialog.setResultConverter((ButtonType param) -> {
             if (param == buttonTypeOk) {
                 if (fontSize.getText().isEmpty())
-                    return new PrintedWord(text.getText(), picker.getValue(),text.getFont());
+                    return new PrintedWord(text.getText(), picker.getValue(),text.getFont());                
                 else
                     return new PrintedWord(text.getText(), picker.getValue(), new Font("System",Integer.parseInt(fontSize.getText())));
-            }else{
+            }
+            else if(param == buttonTypeDelete){
+                cloudPane.getChildren().remove(text);
+                return null;
+            }
+            else{
                 return null;                
             }
         });
