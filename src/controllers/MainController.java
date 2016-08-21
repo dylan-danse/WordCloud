@@ -31,7 +31,6 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
@@ -66,7 +65,7 @@ public class MainController implements Initializable {
     @FXML private ImageView image;
     @FXML private ComboBox themeColorComboBox;
     
-    private Node textClicked;    
+    private Text textClicked; 
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -78,18 +77,27 @@ public class MainController implements Initializable {
         themeColorComboBox.getItems().setAll(Colors.values());
         themeColorComboBox.getSelectionModel().select(0);
         
+        
+        
+        textArea.setOnDragOver((DragEvent event) -> {
+            if(event.getDragboard().hasFiles()){
+                event.acceptTransferModes(TransferMode.ANY);
+            }          
+            event.consume();
+        });
+        
         textArea.setOnDragDropped((DragEvent event) -> {
             Dragboard db = event.getDragboard();
+            StringBuilder sb = new StringBuilder();
+            
             if(db.hasFiles()){
-                event.acceptTransferModes(TransferMode.ANY);
                 for(File file:db.getFiles()){
                     if("txt".equals(TextParser.getExtension(file)))
-                        textArea.setText(TextParser.textFileToString(file.getAbsolutePath()));
+                        sb.append(TextParser.textFileToString(file.getAbsolutePath()));
                 }
-            }else{
-                event.setDropCompleted(false);
-                textArea.setText("");
-            }            
+                textArea.setText(sb.toString());
+                textArea.positionCaret(sb.length());
+            }          
             event.consume();
         });
         
@@ -111,7 +119,7 @@ public class MainController implements Initializable {
         cloudPane.getChildren().clear();
         int minSize = 3;
         int minFreq = 2;
-        int maxWords = 20;
+        int maxWords = 40;
         String fontFamily = "System";
         
         try {
@@ -192,19 +200,26 @@ public class MainController implements Initializable {
             if(Math.random() < 0.2)
                 text.setRotate(-90);            
             
-            text.setOnMouseClicked((MouseEvent e) -> { 
-                    showModifyLabelDialog(text);
-            });        
+            text.setOnMouseClicked((MouseEvent mouseEvent) -> { 
+                showModifyLabelDialog(text);
+            });   
+            text.setOnDragDetected((MouseEvent mouseEvent) -> { 
+                text.startFullDrag();
+            });   
             text.setOnMousePressed((MouseEvent mouseEvent) -> { 
                 textClicked = text;
+                text.setMouseTransparent(true);
                 text.setCursor(Cursor.MOVE);
             });
             text.setOnMouseReleased((MouseEvent mouseEvent) -> {  
                 textClicked = null;
+                text.setMouseTransparent(false);
                 text.setCursor(Cursor.HAND);
             });
             text.setOnMouseEntered((MouseEvent mouseEvent) -> {
-                text.setCursor(Cursor.HAND); 
+                text.setCursor(Cursor.HAND);
+            });
+            text.setOnMouseDragOver((MouseDragEvent mouseEvent) -> {
                 if(textClicked != null){
                     cloudPane.getChildren().setAll(moveItem(cloudPane.getChildren().indexOf(textClicked), 
                                                             cloudPane.getChildren().indexOf(text), 

@@ -51,6 +51,9 @@ public class TextParser {
         }
         words.removeIf(p -> p.getFrequency() < freqMin);
         
+        //TODO : Choose way to truncate collection
+        words = words.subList(0, nbMots);
+        
         if(isOrdered)
             Collections.sort(words);
         else

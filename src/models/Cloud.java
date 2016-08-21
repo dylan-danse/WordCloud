@@ -16,9 +16,9 @@ public class Cloud extends ArrayList<PrintedWord> {
     
     public Cloud(){}
     
-    public Cloud(Collection<WeighedWord> words, String fontFamily, Colors color){        
-        words.stream().forEach((weighedWord) -> {
+    public Cloud(Collection<WeighedWord> words, String fontFamily, Colors color){ 
+        for(WeighedWord weighedWord : words){
             this.add(new PrintedWord(weighedWord, fontFamily, color));
-        });
+        }
     }
 }
