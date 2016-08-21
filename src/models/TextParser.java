@@ -5,16 +5,16 @@
  */
 package models;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -51,9 +51,9 @@ public class TextParser {
         }
         words.removeIf(p -> p.getFrequency() < minFreq);
         
-        //TODO : Choose way to truncate collection
+        words.sort(Comparator.comparing(WeighedWord::getFrequency));
         if(words.size() > nbWords)
-            words = words.subList(0, nbWords);
+            words = words.subList(words.size()-nbWords, words.size());
         
         if(isOrdered)
             Collections.sort(words);
@@ -63,27 +63,25 @@ public class TextParser {
         return words;
     }
      
-     public static String textFileToString(String path){
+    public static String textFileToString(String path){
         StringBuilder sb = new StringBuilder();
-        String line;
-        int octetsRead;
-        byte[]tampon;
         
-        try(InputStream out = Files.newInputStream(Paths.get(path), StandardOpenOption.READ)) {            
-            tampon = new byte[256];
-            octetsRead = out.read(tampon);
-            while (octetsRead > 0) {
-                line = new String(tampon, StandardCharsets.ISO_8859_1);
-                sb.append(line);
-                octetsRead = out.read(tampon);
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path),StandardCharsets.ISO_8859_1))){
+            
+            String line;
+            while ((line = reader.readLine()) != null){
+                sb.append(line).append("\n");
             }
-        } catch (IOException ex) {
-            System.out.println("Specified path is not accessible");
-            ex.printStackTrace(System.err);
-        }        
+            reader.close();
+        }
+        catch (Exception e){
+            System.out.println(e.toString());
+        }
+        
         return sb.toString();
     }
-     
+    
+
      public static String getExtension(File file){
         String extension = "";
         String fileName = file.getAbsolutePath();
