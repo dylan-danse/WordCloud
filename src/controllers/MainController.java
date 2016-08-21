@@ -37,6 +37,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -151,13 +152,16 @@ public class MainController implements Initializable {
         
     private void showModifyLabelDialog(Text text){
         Dialog<PrintedWord> dialog = new Dialog<>();
-        dialog.setTitle("Login Dialog");
-        dialog.setHeaderText("Look, a Custom Login Dialog");
+        dialog.setTitle("Text Custom");
+        dialog.setHeaderText("Customize the text : " + text.getText());
         
         Label label1 = new Label("Font size: ");
         Label label2 = new Label("Color: ");
         TextField fontSize = new TextField();
-        ColorPicker picker = new ColorPicker();
+        fontSize.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
+        fontSize.setText(String.valueOf(text.getFont().getSize()));
+        ColorPicker picker = new ColorPicker((Color) text.getFill());
+        
         
         GridPane grid = new GridPane();
         grid.add(label1,1,1);
@@ -208,12 +212,10 @@ public class MainController implements Initializable {
             });   
             text.setOnMousePressed((MouseEvent mouseEvent) -> { 
                 textClicked = text;
-                text.setMouseTransparent(true);
                 text.setCursor(Cursor.MOVE);
             });
             text.setOnMouseReleased((MouseEvent mouseEvent) -> {  
                 textClicked = null;
-                text.setMouseTransparent(false);
                 text.setCursor(Cursor.HAND);
             });
             text.setOnMouseEntered((MouseEvent mouseEvent) -> {

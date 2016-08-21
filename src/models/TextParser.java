@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class TextParser {
     
-     public static List<WeighedWord> stringToWeighedWords(String text, int nbMots, int tailleMin, int freqMin, boolean isOrdered) {
+     public static List<WeighedWord> stringToWeighedWords(String text, int nbWords, int minSize, int minFreq, boolean isOrdered) {
         List<WeighedWord> words = new ArrayList<>();
         String currentWord;
         WeighedWord word;
@@ -39,7 +39,7 @@ public class TextParser {
             if (lastIndex != BreakIterator.DONE && Character.isLetterOrDigit(text.charAt(firstIndex))) 
             {
                 currentWord = text.substring(firstIndex, lastIndex).toLowerCase();
-                if(currentWord.length() >= tailleMin){
+                if(currentWord.length() >= minSize){
                     word = new WeighedWord(currentWord, 1);
                     if(words.contains(word)){
                         words.get(words.indexOf(word)).incrementFrequency();
@@ -49,10 +49,11 @@ public class TextParser {
                 }                                    
             }
         }
-        words.removeIf(p -> p.getFrequency() < freqMin);
+        words.removeIf(p -> p.getFrequency() < minFreq);
         
         //TODO : Choose way to truncate collection
-        words = words.subList(0, nbMots);
+        if(words.size() > nbWords)
+            words = words.subList(0, nbWords);
         
         if(isOrdered)
             Collections.sort(words);
