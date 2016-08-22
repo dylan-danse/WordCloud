@@ -84,22 +84,16 @@
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <TextField fx:id="maxWordsNumberField" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets right="10.0" />
-                     </GridPane.margin>
-                  </TextField>
                   <TextField fx:id="minFreqField" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Label text="Ordered alphabetically :" textAlignment="CENTER" GridPane.rowIndex="6">
+                  <TextField fx:id="maxWordsNumberField" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <GridPane.margin>
-                        <Insets left="5.0" />
+                        <Insets right="10.0" />
                      </GridPane.margin>
-                  </Label>
-                  <CheckBox fx:id="isOrdered" mnemonicParsing="false" prefHeight="17.0" prefWidth="161.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  </TextField>
                   <ComboBox fx:id="fontChooserComboBox" prefHeight="25.0" prefWidth="216.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets right="10.0" />
@@ -113,6 +107,11 @@
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </Label>
+                  <Label text="Cloud Theme :" GridPane.rowIndex="4">
+                     <GridPane.margin>
+                        <Insets left="5.0" />
+                     </GridPane.margin>
+                  </Label>
                   <ComboBox fx:id="themeColorComboBox" layoutX="241.0" layoutY="200.0" prefHeight="25.0" prefWidth="187.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <opaqueInsets>
                         <Insets />
@@ -121,11 +120,13 @@
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </ComboBox>
-                  <Label text="Cloud Theme :" GridPane.rowIndex="4">
+                  <Label text="Ordered alphabetically :" textAlignment="CENTER" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </Label>
+                  <CheckBox fx:id="isOrdered" mnemonicParsing="false" prefHeight="17.0" prefWidth="161.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  
                </children>
             </GridPane>
          </children>
