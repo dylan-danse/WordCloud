@@ -27,24 +27,26 @@ public class TextParser {
         String currentWord;
         WeighedWord word;
 
-        BreakIterator breakIterator = BreakIterator.getWordInstance();
-        breakIterator.setText(text);
-        int lastIndex = breakIterator.first();
+        BreakIterator iterator = BreakIterator.getWordInstance();
+        iterator.setText(text);
+        
+        int last = iterator.first();
+        int first;
+        
+        while (BreakIterator.DONE != last) {
+            first = last;
+            last = iterator.next();
 
-        while (BreakIterator.DONE != lastIndex) {
-            int firstIndex = lastIndex;
-            lastIndex = breakIterator.next();
-
-            if (lastIndex != BreakIterator.DONE && Character.isLetterOrDigit(text.charAt(firstIndex))) 
+            if (Character.isLetterOrDigit(text.charAt(first)) && last != BreakIterator.DONE) 
             {
-                currentWord = text.substring(firstIndex, lastIndex).toLowerCase();
+                currentWord = text.substring(first, last).toLowerCase();
                 if(currentWord.length() >= minSize){
                     word = new WeighedWord(currentWord, 1);
-                    if(words.contains(word)){
+                    if(words.contains(word))
                         words.get(words.indexOf(word)).incrementFrequency();
-                    }else{
+                    else
                         words.add(word);
-                    }
+                    
                 }                                    
             }
         }
